@@ -21,7 +21,9 @@ namespace Saneparse {
 			{
 				ret = true;
 				Match m = re.Match (InternalStr);
-				InternalStr = m.Replace(InternalStr, (r.ToType) + tok.GenString(m.Value) + "");
+				char type = r.ToType;
+				char token = tok.GenString (m.Value);
+				InternalStr = m.Replace(InternalStr, new string(new char[]{ type, token }));
 			}
 			return ret;
 		}
@@ -52,7 +54,7 @@ namespace Saneparse {
 		public bool RunPass()
 		{
 			bool ret = false;
-			for (char c = root; c != Strings.Last().Key; c = (char)((int)c+1)) 
+			for (char c = root; ((int)c) < ((int)Strings.Last().Key + 1); c = (char)((int)c+1)) 
 			{
 				foreach (Rule r in Rules) 
 				{
