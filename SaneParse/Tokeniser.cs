@@ -1,19 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SaneParse
 {
 	public struct TokenisedString
 	{
-		public TokenisedString(string From)
+		public TokenisedString(string From, Tokeniser tokeniser)
 		{
 			InternalStr = From;
+			tok = tokeniser;
 		}
 		string InternalStr;
 		Tokeniser tok;
 		public bool MatchRule(Rule r){
-			//MATCH RULE - TURN /X/ INTO [\uE000-\uEC7F]\uXXXX (BUT IGNORE \/)
+			//MATCH RULE - TURN /X/ INTO ([\uE000-\uEC7F]\uXXXX) (BUT IGNORE \/)
 			//RETURN TRUE IF RULE APPLIED
 			return true;
 		}
@@ -31,23 +33,13 @@ namespace SaneParse
 				if (s.Contains (':')) //if not its just a comment
 				{
 					string[] subSections = s.Split (':');
-					Rules.Add (new Rule (subSections [0], s.Substring (subSections [0].Length + 1)));
+					Rules.Add (new Rule (subSections [0], s.Substring (subSections [0].Length + 1), this));
 				}
 			}
 		}
-	}
-	public class Rule
-	{
-		char ToType;
-		string MatchRegex;
-		public Tokeniser tokeniser;
-		public Rule(string TypeStr, string RegexStr)
+		public char TypeToChar(string s)
 		{
-			if (tokeniser.Types.ContainsValue (TypeStr)) 
-			{
-				ToType = tokeniser.Types.FirstOrDefault (x => x.Value == TypeStr).Key;
-			}
-
+			return Types.FirstOrDefault (x => x.Value == s).Key;
 		}
 	}
 

@@ -36,4 +36,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\SaneParse\SaneParse.csproj">
+      <Project>{A10DBC88-B206-4E89-8DCE-A42DAA77133D}</Project>
+      <Name>SaneParse</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CalcDemo.saneparse">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
