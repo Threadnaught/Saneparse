@@ -15,12 +15,15 @@ namespace Saneparse {
 		Tokeniser tok;
 		public bool MatchRule(Rule r)
 		{
+			bool ret = false;
 			Regex re = r.GenMatchRegex ();
 			while (re.IsMatch(InternalStr)) 
 			{
+				ret = true;
 				Match m = re.Match (InternalStr);
-				InternalStr = m.Replace(InternalStr, r.ToType + tok.GenString(m.Value));
+				InternalStr = m.Replace(InternalStr, (r.ToType) + tok.GenString(m.Value) + "");
 			}
+			return ret;
 		}
 	}
 	public class Tokeniser
@@ -56,6 +59,7 @@ namespace Saneparse {
 					while (Strings[c].MatchRule(r)) { ret = true; }
 				}
 			}
+			return ret;
 		}
 		public void Run(string s)
 		{
@@ -64,7 +68,7 @@ namespace Saneparse {
 		}
 		public char GenString(string In)
 		{
-			char ret = (char)(((int)'\uE000') + tokeniser.Types.Count + 1);
+			char ret = (char)(((int)'\uE000') + Strings.Count + 1);
 			Strings.Add(ret, new TokenisedString(In, this));
 			return ret;
 		}

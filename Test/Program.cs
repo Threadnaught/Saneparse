@@ -11,6 +11,7 @@ namespace Test
 		{
 			Tokeniser t = new Tokeniser ();
 			t.ParseRules (File.ReadAllText ("CalcDemo.saneparse"));
+			t.Run ("1+1");
 		}
 	}
 }
