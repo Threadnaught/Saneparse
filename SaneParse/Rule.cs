@@ -6,14 +6,16 @@ using System.Text.RegularExpressions;
 namespace Saneparse{
 	public class Rule
 	{
-		static Regex FindTokens = new Regex ("(?<!\\\\)/[a-zA-Z0-9]/");//regex to find /token/s
+		static Regex FindTokens = new Regex ("(?<!\\\\)/[a-zA-Z0-9]+/");//regex to find /token/s
 		public char ToType;
 		public string MatchRegex;
 		public Tokeniser tokeniser;
 		public Rule(){
 		}
-		public Rule(string TypeStr, string RegexStr, Tokeniser tokeniser)
+		public Rule(string TypeStr, string LookForRegex, Tokeniser tok)
 		{
+			MatchRegex = LookForRegex;
+			tokeniser = tok;
 			if (tokeniser.Types.ContainsValue (TypeStr)) 
 			{
 				//if type already has a char:
@@ -31,9 +33,11 @@ namespace Saneparse{
 			string CompiledMatchRegex = MatchRegex;
 			while (FindTokens.IsMatch(CompiledMatchRegex)) 
 			{
-
+				Match m = FindTokens.Match (CompiledMatchRegex);
+				char c = tokeniser.TypeToChar (m.Value.Trim (new char[] { '/' }));
+				CompiledMatchRegex = m.Replace (CompiledMatchRegex, "(" + c + "[\uE000-\uEC7F])");
 			}
-			return new Regex ("");
+			return new Regex (CompiledMatchRegex);
 		}
 	}
 }

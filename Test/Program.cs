@@ -1,6 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
-using SaneParse;
+using Saneparse;
 using System.IO;
 
 namespace Test

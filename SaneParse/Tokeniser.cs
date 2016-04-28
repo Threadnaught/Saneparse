@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace SaneParse
-{
-	public struct TokenisedString
+namespace Saneparse {
+	public class TokenisedString
 	{
 		public TokenisedString(string From, Tokeniser tokeniser)
 		{
@@ -14,10 +13,14 @@ namespace SaneParse
 		}
 		string InternalStr;
 		Tokeniser tok;
-		public bool MatchRule(Rule r){
-			//MATCH RULE - TURN /X/ INTO ([\uE000-\uEC7F]\uXXXX) (BUT IGNORE \/)
-			//RETURN TRUE IF RULE APPLIED
-			return true;
+		public bool MatchRule(Rule r)
+		{
+			Regex re = r.GenMatchRegex ();
+			while (re.IsMatch(InternalStr)) 
+			{
+				Match m = re.Match (InternalStr);
+				InternalStr = m.Replace(InternalStr, r.ToType + tok.GenString(m.Value));
+			}
 		}
 	}
 	public class Tokeniser
@@ -25,6 +28,7 @@ namespace SaneParse
 		public Dictionary<char, TokenisedString> Strings = new Dictionary<char, TokenisedString>();
 		public Dictionary<char, string> Types = new Dictionary<char, string>();
 		public List<Rule> Rules = new List<Rule>();
+		public char root;
 		public void ParseRules(string RuleString)
 		{
 			string[] lines = RuleString.Split (new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
@@ -34,8 +38,35 @@ namespace SaneParse
 				{
 					string[] subSections = s.Split (':');
 					Rules.Add (new Rule (subSections [0], s.Substring (subSections [0].Length + 1), this));
+					Rules.Last ().tokeniser = this;
 				}
 			}
+		}
+		public void LoadString(string s)
+		{
+			root = GenString (s);
+		}
+		public bool RunPass()
+		{
+			bool ret = false;
+			for (char c = root; c != Strings.Last().Key; c = (char)((int)c+1)) 
+			{
+				foreach (Rule r in Rules) 
+				{
+					while (Strings[c].MatchRule(r)) { ret = true; }
+				}
+			}
+		}
+		public void Run(string s)
+		{
+			LoadString (s);
+			while (RunPass()) {	}
+		}
+		public char GenString(string In)
+		{
+			char ret = (char)(((int)'\uE000') + tokeniser.Types.Count + 1);
+			Strings.Add(ret, new TokenisedString(In, this));
+			return ret;
 		}
 		public char TypeToChar(string s)
 		{
