@@ -24,8 +24,8 @@ namespace Saneparse{
 			else 
 			{
 				//if type needs a new char:
-				tokeniser.Types.Add ((char)(((int)'\uEC80') + tokeniser.Types.Count + 1), TypeStr);
-				ToType = (char)(((int)'\uEC80') + tokeniser.Types.Count);
+				tokeniser.Types.Add ((char)(((int)Utils.TypeStart) + tokeniser.Types.Count + 1), TypeStr);
+				ToType = (char)(((int)Utils.TypeStart) + tokeniser.Types.Count);
 			}
 		}
 		public Regex GenMatchRegex()
@@ -35,7 +35,7 @@ namespace Saneparse{
 			{
 				Match m = FindTokens.Match (CompiledMatchRegex);
 				char c = tokeniser.TypeToChar (m.Value.Trim (new char[] { '/' }));
-				CompiledMatchRegex = m.Replace (CompiledMatchRegex, "(" + c + "[\uE000-\uEC7F])");
+				CompiledMatchRegex = m.Replace (CompiledMatchRegex, "(" + c + "[" + Utils.TokenStart + "-" + Utils.TokenEnd + "])");
 			}
 			return new Regex (CompiledMatchRegex);
 		}

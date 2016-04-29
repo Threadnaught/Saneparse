@@ -27,6 +27,22 @@ namespace Saneparse {
 			}
 			return ret;
 		}
+		public override string ToString ()
+		{
+			string Out = "";
+			foreach (char c in InternalStr) 
+			{
+				if (Utils.IsTypeChar (c))
+					continue;
+				if (Utils.IsTokenChar (c)) 
+				{
+					Out += "(" + tok.Strings [c].ToString () + ")";
+					continue;
+				}
+				Out += c;
+			}
+			return Out;
+		}
 	}
 	public class Tokeniser
 	{
@@ -54,11 +70,11 @@ namespace Saneparse {
 		public bool RunPass()
 		{
 			bool ret = false;
-			for (char c = root; ((int)c) < ((int)Strings.Last().Key + 1); c = (char)((int)c+1)) 
+			foreach (Rule r in Rules) 
 			{
-				foreach (Rule r in Rules) 
+				while (Strings[root].MatchRule(r)) 
 				{
-					while (Strings[c].MatchRule(r)) { ret = true; }
+					ret = true;
 				}
 			}
 			return ret;
@@ -70,7 +86,7 @@ namespace Saneparse {
 		}
 		public char GenString(string In)
 		{
-			char ret = (char)(((int)'\uE000') + Strings.Count + 1);
+			char ret = (char)(((int)Utils.TokenStart) + Strings.Count + 1);
 			Strings.Add(ret, new TokenisedString(In, this));
 			return ret;
 		}
