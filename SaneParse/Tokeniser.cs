@@ -4,46 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Saneparse {
-	public class TokenisedString
-	{
-		public TokenisedString(string From, Tokeniser tokeniser)
-		{
-			InternalStr = From;
-			tok = tokeniser;
-		}
-		string InternalStr;
-		Tokeniser tok;
-		public bool MatchRule(Rule r)
-		{
-			bool ret = false;
-			Regex re = r.GenMatchRegex ();
-			while (re.IsMatch(InternalStr)) 
-			{
-				ret = true;
-				Match m = re.Match (InternalStr);
-				char type = r.ToType;
-				char token = tok.GenString (m.Value);
-				InternalStr = m.Replace(InternalStr, new string(new char[]{ type, token }));
-			}
-			return ret;
-		}
-		public override string ToString ()
-		{
-			string Out = "";
-			foreach (char c in InternalStr) 
-			{
-				if (Utils.IsTypeChar (c))
-					continue;
-				if (Utils.IsTokenChar (c)) 
-				{
-					Out += "(" + tok.Strings [c].ToString () + ")";
-					continue;
-				}
-				Out += c;
-			}
-			return Out;
-		}
-	}
+
 	public class Tokeniser
 	{
 		public Dictionary<char, TokenisedString> Strings = new Dictionary<char, TokenisedString>();
@@ -79,16 +40,21 @@ namespace Saneparse {
 			}
 			return ret;
 		}
-		public void Run(string s)
+		public string Run(string s)
 		{
 			LoadString (s);
 			while (RunPass()) {	}
+			return GenJSON ();
 		}
 		public char GenString(string In)
 		{
 			char ret = (char)(((int)Utils.TokenStart) + Strings.Count + 1);
 			Strings.Add(ret, new TokenisedString(In, this));
 			return ret;
+		}
+		public string GenJSON()
+		{
+			return "{\"ROOT\":" + Strings [root].GenJSON () + "}";
 		}
 		public char TypeToChar(string s)
 		{

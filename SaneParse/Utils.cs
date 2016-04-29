@@ -23,5 +23,21 @@ namespace Saneparse
 		{
 			return (int)c >= (int)TypeStart && (int)c <= (int)TypeEnd;
 		}
+		public static bool IsSpecial(this char c)
+		{
+			return c.IsTypeChar () || c.IsTokenChar () || c == '\0';
+		}
+		public static string EscapeJSON(this string s)
+		{
+			s = s.Replace ("\"", "\\\"");
+			s = s.Replace ("\\", "\\\\");
+			s = s.Replace ("/", "\\/");
+			s = s.Replace ("\b", "\\\b");
+			s = s.Replace ("\f", "\\\f");
+			s = s.Replace ("\n", "\\\n");
+			s = s.Replace ("\r", "\\\r");
+			s = s.Replace ("\t", "\\\t");
+			return s;
+		}
 	}
 }

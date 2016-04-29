@@ -33,8 +33,7 @@ namespace Saneparse
 			string Out = "";
 			foreach (char c in InternalStr) 
 			{
-				if (Utils.IsTypeChar (c))
-					continue;
+				if (Utils.IsTypeChar (c)) continue;
 				if (Utils.IsTokenChar (c)) 
 				{
 					Out += "(" + tok.Strings [c].ToString () + ")";
@@ -43,6 +42,41 @@ namespace Saneparse
 				Out += c;
 			}
 			return Out;
+		}
+		public string GenJSON()
+		{
+			List<string> Builder = new List<string> ();
+			Builder.Add ("");
+			for (int i = 0; i < InternalStr.Length; i++) 
+			{
+				if (InternalStr [i].IsTypeChar ())
+				{
+					Builder.Add (new string (new char[] { InternalStr[i], InternalStr[i + 1] }));
+					i++;
+					Builder.Add ("");
+				}
+				else
+				{
+					Builder [Builder.Count - 1] += InternalStr [i];
+				}
+			}
+			if (Builder [0] == "") Builder.RemoveAt (0);
+			if (Builder [Builder.Count - 1] == "") Builder.RemoveAt (Builder.Count - 1);
+			string Out = "";
+			int Counter = 0;
+			foreach (string s in Builder)
+			{
+				if (s [0].IsTypeChar ())
+				{
+					Out += "{\"" + tok.Types [s [0]] + Counter.ToString() + "\":" + tok.Strings [s [1]].GenJSON () + "},";
+					Counter++;
+				}
+				else
+				{
+					Out += "\"" + s.EscapeJSON() + "\",";
+				}
+			}
+			return "[" + Out.Trim(new char[]{','}) + "]";
 		}
 	}
 }
