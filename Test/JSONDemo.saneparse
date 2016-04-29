@@ -1,0 +1,6 @@
+comments are lines without colons
+
+find strings
+STR:".*?"
+find numbers
+NUM:(-)?[0-9]+(\.[0-9]+)?
