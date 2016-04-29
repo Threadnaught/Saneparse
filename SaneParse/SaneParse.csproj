@@ -37,6 +37,7 @@
     <Compile Include="Rule.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Tokeniser.cs" />
+    <Compile Include="TokenisedString.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
