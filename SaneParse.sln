@@ -5,12 +5,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaneParse", "SaneParse\Sane
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{323E47E1-E38B-4279-94D3-7ADFD8DD5CF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleParse", "ConsoleParse\ConsoleParse.csproj", "{07682F91-22C5-4B43-98B0-FD227D1E9020}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07682F91-22C5-4B43-98B0-FD227D1E9020}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07682F91-22C5-4B43-98B0-FD227D1E9020}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07682F91-22C5-4B43-98B0-FD227D1E9020}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07682F91-22C5-4B43-98B0-FD227D1E9020}.Release|Any CPU.Build.0 = Release|Any CPU
 		{323E47E1-E38B-4279-94D3-7ADFD8DD5CF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{323E47E1-E38B-4279-94D3-7ADFD8DD5CF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{323E47E1-E38B-4279-94D3-7ADFD8DD5CF1}.Release|Any CPU.ActiveCfg = Release|Any CPU

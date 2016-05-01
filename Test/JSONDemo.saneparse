@@ -4,3 +4,5 @@ find strings
 STR:".*?"
 find numbers
 NUM:(-)?[0-9]+(\.[0-9]+)?
+find whitespaces
+WS:\s+
